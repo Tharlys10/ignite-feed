@@ -8,3 +8,7 @@
 .header img {
   height: 2rem;
 }
+
+.header strong {
+  margin: 0.25rem;
+}
