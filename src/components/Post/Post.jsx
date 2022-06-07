@@ -1,36 +1,50 @@
+import { format, formatDistanceToNow } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
+
 import { Avatar } from '../Avatar/Avatar';
 import { Comment } from '../Comment/Comment';
 
 import styles from './Post.module.css';
 
-export function Post(props) {
+export function Post({ author, published_at, content }) {
+  const published_date_formatted = format(published_at, "dd 'de' LLLL 'de' yyyy 'às' HH:mm", {
+    locale: ptBR,
+  });
+
+  const published_date_relative_to_now = formatDistanceToNow(published_at, {
+    locale: ptBR,
+    addSuffix: true
+  })
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
           <Avatar
-            src="https://github.com/Tharlys10.png"
+            src={author.avatar_url}
           />
           <div className={styles.authorInfo}>
-            <strong>Tharlys Alves</strong>
-            <span>Web Developer</span>
+            <strong>{ author.name }</strong>
+            <span>{ author.role }</span>
           </div>
         </div>
 
-        <time title="04 de Junho de 2022 às 22:00" dateTime="2022-06-04T22:00:00">Publicado há 1h</time>
+        <time title={published_date_formatted} dateTime={published_at.toISOString()}>{ published_date_relative_to_now }</time>
       </header>
 
       <div className={styles.content}>
-        <p>Fala galeraa 👋</p>
-        <p>Acabei de subir mais um projeto no meu portifa. É um projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto é DoctorCare 🚀</p>
-        <p>
-          👉{' '}<a href="#">jane.design/doctorcare</a>
-        </p>
-        <p>
-          <a href="#">#novoprojeto</a>{' '}
-          <a href="#">#nlw</a>{' '}
-          <a href="#">#rocketseat</a>
-        </p>
+        {
+          content.map((item) => {
+            switch (item.type) {
+              case 'paragraph':
+                return <p key={item.id}>{ item.content }</p>;
+              case 'link':
+                return <p key={item.id}><a href={ item.content } target="_blank">{ item.content }</a></p>;
+              default:
+                return null;
+            }
+          })
+        }
       </div>
 
       <form className={styles.commentForm}>

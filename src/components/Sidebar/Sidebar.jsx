@@ -17,7 +17,7 @@ export function Sidebar() {
         />
 
         <strong>Tharlys Alves</strong>
-        <span>Web Developer</span>
+        <span>Developer Full Stack</span>
       </div>
 
       <footer>
